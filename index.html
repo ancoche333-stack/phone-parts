@@ -1,0 +1,54 @@
+const compatibleText = (item['الأجهزة المتوافقة'] || '').toLowerCase();
+            const crossBrandMatch = compatibleText.includes(currentBrand.toLowerCase());
+            
+            const matchBrand = (currentBrand === 'الكل')  mainBrandMatch  crossBrandMatch;
+
+            const mainDeviceText = (item['الجهاز الأساسي'] || '').toLowerCase();
+            const categoryText = (item['القسم'] || '').toLowerCase();
+            
+            const matchSearch = mainDeviceText.includes(query) || 
+                                compatibleText.includes(query) || 
+                                categoryText.includes(query);
+
+            return matchBrand && matchSearch;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#64748b; padding:20px;">لا توجد نتائج مطابقة لطلبك.</p>';
+            return;
+        }
+
+        filtered.forEach(item => {
+            if(!item['الجهاز الأساسي']) return;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = 
+                <div class="card-header">
+                    <h3 class="device-title">${item['الجهاز الأساسي']} <small style="font-size:12px; color:#64748b;">(${item['القسم'] || ''})</small></h3>
+                    <span class="brand-badge">${item['الماركة الرئيسية'] || item['الماركة'] || ''}</span>
+                </div>
+                <div class="compatible-box">
+                    <strong>قطع متوافقة ومطابقة:</strong><br>
+                    <span>${item['الأجهزة المتوافقة'] || ''}</span>
+                </div>
+            ;
+            container.appendChild(card);
+        });
+    }
+
+    function setBrand(brand, btn) {
+        currentBrand = brand;
+        document.querySelectorAll('#brandButtons .btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderData();
+    }
+
+    function filterData() {
+        renderData();
+    }
+
+    loadSheetData();
+</script>
+
+</body>
+</html>
